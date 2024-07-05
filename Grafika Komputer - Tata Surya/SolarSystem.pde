@@ -4,7 +4,6 @@ import peasy.org.apache.commons.math.geometry.*;
 
 // PeasyCam automatically adds mouse interaction to your 3D image
 Planet sun;
-
 PeasyCam cam;
 
 PImage sunTexture;
@@ -33,10 +32,10 @@ void setup() {
   textures[4] = loadImage("bright.jpeg");
   textures[5] = loadImage("tyedye.jpeg");
 
-  // Tells camera to look at center of world from 100 units away
+  // Tells camera to look at center of world from 400 units away
   cam = new PeasyCam(this, 400); 
   sun = new Planet(50, 0, 0, sunTexture);
-  sun.spawnMoons(4, 1);
+  spawnPlanets();
 }
 
 void draw() {
@@ -50,20 +49,27 @@ void draw() {
   sun.orbit();
 }
 
+void spawnPlanets() {
+  for (int i = 0; i < textures.length; i++) {
+    float r = 20;
+    float d = (i + 1) * 100; // Distance from the sun
+    float o = random(-0.02, 0.02); // Orbit speed
+    Planet planet = new Planet(r, d, o, textures[i]);
+    sun.addPlanet(planet);
+  }
+}
+
 class Planet {
   float radius;
   float angle;
   float distance;
   Planet[] planets;
   float orbitSpeed;
-  PVector v;
   PShape globe;
 
   Planet(float r, float d, float o, PImage img) {
-    v = PVector.random3D(); // Make unit vector of length 1 from planet
     radius = r;
     distance = d;
-    v.mult(distance); // Scale unit vector
     angle = random(TWO_PI); // Random based on 2pi radians
     orbitSpeed = o;
     noStroke();
@@ -81,18 +87,15 @@ class Planet {
     }
   }
 
-  void spawnMoons(int total, int level) {
-    planets = new Planet[total];
-    for (int i = 0; i < planets.length; i++) {
-      float r = radius / (level + 0.6);
-      float d = random((radius + r) * 3, (radius + r) * 6); // Increase distance range
-      float o = random(-0.02, 0.02);
-      int index = int(random(0, textures.length));
-      planets[i] = new Planet(r, d, o, textures[index]);
-      if (level < 4) {
-        int num = int(random(0, 4));
-        planets[i].spawnMoons(num, level + 1);
-      }
+  void addPlanet(Planet planet) {
+    if (planets == null) {
+      planets = new Planet[1];
+      planets[0] = planet;
+    } else {
+      Planet[] temp = new Planet[planets.length + 1];
+      arrayCopy(planets, temp);
+      temp[planets.length] = planet;
+      planets = temp;
     }
   }
 
@@ -100,17 +103,24 @@ class Planet {
     pushMatrix();
     noStroke();
     fill(200, 220, 255);
-    PVector v2 = new PVector(1, 0, 1); // Arbitrary vector
-    PVector p = v.cross(v2); // Cross product to create perpendicular vector
-    rotate(angle, p.x, p.y, p.z);
-    translate(v.x, v.y, v.z);
+    PVector position = new PVector(cos(angle) * distance, sin(angle) * distance, 0); // Update position based on angle
+    translate(position.x, position.y, position.z);
     shape(globe);
+    popMatrix();
 
+    // Show orbit paths
+    noFill();
+    stroke(255, 50); // Set the orbit path color
+    pushMatrix();
+    rotateX(CENTER); // Rotate the ellipse to make it horizontal
+    ellipse(0, 0, distance * 2, distance * 2);
+    popMatrix();
+    
+    // Show child planets
     if (planets != null) {
       for (int i = 0; i < planets.length; i++) {
         planets[i].show();
       }
     }
-    popMatrix();
   }
 }
