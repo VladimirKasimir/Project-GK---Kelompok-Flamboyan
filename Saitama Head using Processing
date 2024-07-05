@@ -1,0 +1,60 @@
+void setup() {
+  size(400, 400);
+  background(0);
+  noStroke();
+  
+  // Gambar kepala
+  fill(255, 222, 200); // Warna kulit
+  arc(200, 200, 170, 220, 0, TWO_PI);
+  
+  // Gambar mata
+  stroke(0);
+  strokeWeight(2);
+  fill(255); // Warna mata putih
+  arc(200, 170, 30, 20, 0, PI); // Mata kiri
+  arc(200, 170, 30, 20, PI, TWO_PI); // Mata kiri
+  arc(250, 170, 30, 20, 0, PI); // Mata kanan
+  arc(250, 170, 30, 20, PI, TWO_PI); // Mata kanan  
+  
+  //Gambar Alis
+  stroke(0);
+  strokeWeight(2);
+  line(185, 154, 213, 153); //kiri
+  line(213, 153, 215, 151); //kiri
+  line(237, 154, 265, 154); //kanan
+  line(237, 154, 235, 152); //kanan
+  
+  fill(0); // Warna mata hitam
+  ellipse(203, 168, 3, 3); // Pupil kiri
+  ellipse(250, 168, 3, 3); // Pupil kanan
+  
+  // Gambar hidung
+  stroke(0);
+  strokeWeight(2);
+  fill(255, 222, 200); // Warna hidung
+  line(230, 180, 230, 200);
+  line(230, 200, 235, 210);
+  arc(225, 210, 20, 50, 0, PI/6);
+  
+  // Gambar Telinga
+  noStroke();
+  arc(130, 200, 70, 80, 90, 160);
+  fill(0);
+  stroke(0);
+  strokeWeight(2);
+  line(120, 163, 128, 178);
+  line(105, 190, 115, 185);
+  line(115, 185, 118, 200);
+  line(118, 200, 110, 205);
+  line(110, 205, 112, 220);
+  line(112, 220, 118, 210);
+  
+  // Gambar mulut
+  noFill();
+  stroke(0); // Warna garis hitam
+  strokeWeight(3); // Ketebalan garis
+  line(225, 250, 235, 250); //Mulut
+}
+
+void draw() {
+}
