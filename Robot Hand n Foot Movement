@@ -1,0 +1,84 @@
+//ROBOT M. Gymnastiar
+
+int armAngle = 0;
+int legAngle = 0;
+int armAngleChange = 5;
+int legAngleChange = 5;
+final int ANGLE_LIMIT = 135;
+
+void setup() {
+  size(200, 200);
+  smooth();
+  frameRate(30);
+}
+
+void draw() {
+  background(255);
+  pushMatrix();
+  translate(50, 50); // place robot so arms and legs are always on screen
+  drawRobot();
+  armAngle += armAngleChange;
+  legAngle += legAngleChange;
+
+  // if the arm has moved past its limit,
+  // reverse direction and set within limits.
+  if (armAngle > ANGLE_LIMIT || armAngle < 0) {
+    armAngleChange = -armAngleChange;
+    armAngle += armAngleChange;
+  }
+
+  // if the leg has moved past its limit,
+  // reverse direction and set within limits.
+  if (legAngle > ANGLE_LIMIT || legAngle < 0) {
+    legAngleChange = -legAngleChange;
+    legAngle += legAngleChange;
+  }
+
+  popMatrix();
+}
+
+void drawRobot() {
+  noStroke();
+  fill(255, 0, 127);
+  rect(20, 0, 38, 30); // head
+  rect(14, 32, 50, 50); // body
+  drawLeftArm();
+  drawRightArm();
+  drawLeftLeg();
+  drawRightLeg();
+  fill(192, 192, 192);
+  ellipse(30, 12, 12, 12); // left eye
+  ellipse(47, 12, 12, 12); // right eye
+}
+
+void drawLeftArm() {
+  pushMatrix();
+  translate(12, 32);
+  rotate(radians(armAngle));
+  rect(-12, 0, 12, 37); // left arm
+  popMatrix();
+}
+
+void drawRightArm() {
+  pushMatrix();
+  translate(66, 32);
+  rotate(radians(-armAngle));
+  rect(0, 0, 12, 37); // right arm
+  popMatrix();
+}
+
+void drawLeftLeg() {
+  pushMatrix();
+  translate(24, 82);
+  rotate(radians(legAngle)); // Rotate the left leg
+  rect(-12, 0, 12, 37); // left leg
+  popMatrix();
+}
+  
+void drawRightLeg() {
+  pushMatrix();
+  translate(56, 82);
+  rotate(radians(-legAngle)); // Rotate the right leg
+  rect(0, 0, 12, 37); // right leg
+  popMatrix();
+}
